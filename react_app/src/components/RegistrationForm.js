@@ -7,7 +7,7 @@ function RegistrationForm() {
   const handleFormSubmit = event => {
     event.preventDefault();
     axios
-      .post('http://localhost:8000/register/', {
+      .post('http://localhost:8000/api/register/', {
         username: event.target.username.value,
         email: event.target.email.value,
         password: event.target.password.value,
@@ -18,7 +18,10 @@ function RegistrationForm() {
         localStorage.setItem('auth_token', response.data['auth_token']);
         console.log(localStorage.getItem('auth_token'));
       })
-      .catch(error => console.error('Ошибка при отправке данных:', error));
+      .catch(error => {
+        console.error('Ошибка при отправке данных:', error);
+        alert("Ошибка при отправке данных");
+      });
   };
 
   return (

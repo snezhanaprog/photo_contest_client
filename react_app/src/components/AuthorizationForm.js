@@ -7,7 +7,7 @@ function AuthorizationForm() {
   const handleFormSubmit = event => {
     event.preventDefault();
     axios
-      .post('http://localhost:8000/login/', {
+      .post('http://localhost:8000/api/login/', {
         username: event.target.username.value,
         password: event.target.password.value,
       })
