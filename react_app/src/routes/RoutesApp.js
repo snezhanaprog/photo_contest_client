@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import Authorization from '../pages/Authorization.js';
-import Registration from '../pages/Registration.js';
+import Authorization from '../pages/Authorization';
+import Registration from '../pages/Registration';
+import Photos from '../pages/Photos';
+import UserProfile  from '../pages/UserProfile'
 
 function RouterApp() {
   return (
@@ -10,7 +12,8 @@ function RouterApp() {
           <Routes>
               <Route path="/" element={<Registration/>} />
               <Route path="/log" element={<Authorization/>}/>
-              <Route path="/exit" />
+              <Route path='/photos' element={<Photos/>} />
+              <Route path='/profile' element={<UserProfile/>} />
           </Routes>
         </nav>
     </Router>
