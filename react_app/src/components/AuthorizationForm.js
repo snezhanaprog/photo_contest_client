@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function AuthorizationForm() {
+  const navigate = useNavigate(); 
   useEffect(() => {}, []);
 
   const handleFormSubmit = event => {
@@ -13,9 +15,9 @@ function AuthorizationForm() {
       })
       .then(response => {
         alert('Успешная  авторизация');
-        console.log(response);
-        sessionStorage.setItem('auth_token', response.data['auth_token']);
-        console.log(sessionStorage.getItem('auth_token'));
+        localStorage.setItem('auth_token', response.data['auth_token']);
+        console.log(localStorage.getItem('auth_token'));
+        navigate('/photos');
       })
       .catch(error => alert('Имя или пароль неверны'));
   };
