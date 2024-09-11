@@ -1,33 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import Modal from 'react-modal';
+import PhotoDetail from '../pages/PhotoDetail';
 
-function PhotoList() {
-  let [photos, setPhotos] = useState([])
+function PhotoList({ photos }) {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedPhotoId, setSelectedPhotoId] = useState(null);
 
-  useEffect(() => {
-        getPhotos()
-    }, [])
+  const openModal = (id) => {
+    setSelectedPhotoId(id);
+    setModalIsOpen(true);
+  };
 
-  let getPhotos = () => {
-      axios.get('http://localhost:8000/api/photos/')
-      .then((response) => {
-        console.log(response.data);
-        setPhotos(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    }
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setSelectedPhotoId(null);
+  };
+
+  const selectedPhoto = photos.find(photo => photo.id === selectedPhotoId);
 
   return (
-    <>
-      <h1>Все фото</h1>
-        <div>
-            {photos.map((photo, index) => (
-                    <p>{photo.title}</p>
-            ))}
-        </div>
-    </>
+    <div>
+      {photos.length === 0 ? (
+        <p>Нет фотографий для отображения.</p>
+      ) : (
+        photos.map(photo => (
+          <div key={photo.id}>
+            <button onClick={() => openModal(photo.id)}>{photo.title}</button>
+            <img src={photo.image} alt={photo.title} />
+            <p>{photo.description}</p>
+          </div>
+        ))
+      )}
+      <Modal 
+        isOpen={modalIsOpen} 
+        onRequestClose={closeModal}
+        ariaHideApp={false}
+      >
+        {selectedPhoto && (
+          <div>
+            <PhotoDetail id={selectedPhotoId} />
+            <button onClick={closeModal}>Закрыть</button>
+          </div>
+        )}
+      </Modal>
+    </div>
   );
 }
 

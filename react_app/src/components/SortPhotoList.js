@@ -10,7 +10,6 @@ function SortPhotoList({ sortPhotos, onSortChange }) {
           const newState = !sortPhotos.publicatedAt.active 
             ? { active: true, up: true }
             : { active: true, up: !sortPhotos.publicatedAt.up };
-          
           return { 
             ...sortPhotos, 
             publicatedAt: newState, 
