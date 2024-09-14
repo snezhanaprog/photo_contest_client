@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Comments from '../components/Comments';
 import Voice from '../components/Voice';
+import AddComment from '../components/AddComment';
 
 const isAuthenticated = () => {
   const token = localStorage.getItem('auth_token');
@@ -20,12 +21,16 @@ function PhotoDetail({id}) {
 
 
   useEffect(() => {
-        getPhotos()
+        getPhoto()
     }, [])
 
-  let getPhotos = () => {
-      axios.get(`http://localhost:8000/api/photo`,{
-        'id': id
+  let getPhoto = () => {
+    console.log({id})
+      axios.get(`http://localhost:8000/api/photo/`+id,{
+        headers: {
+          Authorization: `Token ${localStorage.getItem('auth_token')}`,
+          'Content-Type':'application/json'
+        }
       })
       .then((response) => {
         console.log(response.data);
@@ -44,12 +49,13 @@ function PhotoDetail({id}) {
               <p>{photo.description}</p>
               <p>{photo.author}</p>
             </div>
-        <Comments photo_id={id}/>
         {authenticated ? (
-        <Voice photo_id={id}/>
+        <Voice photo_id={id} is_liked={photo.is_liked}/>
         ):(
           <></>
         )}
+          <AddComment photo_id={id} text={"Добавить комментарий"}/>
+          <Comments photo_id={id}/>
         </>
     </>
   );
