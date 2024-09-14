@@ -1,41 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function Voice({photo_id}) {
+function Voice({photo_id, is_liked}) {
   const [statusVoice, setStatusVoice] = useState(false);
 
     useEffect(() => {
-        getStatusVoice();
+        setStatusVoice(is_liked)
     }, [])
 
-    const getStatusVoice = async () => {
-        try {  
-        const response = await axios.post('http://localhost:8000/api/status-voice/',
-            {
-                photo_id: photo_id
-            },
-            {
-                headers: {
-                    Authorization: `Token ${localStorage.getItem('auth_token')}`,
-                }
-            });
-        setStatusVoice(response.data['success'])
-      } catch (error) { console.error('Ошибка загрузки:', error);}
-    };
-  
     const changeStatusVoice = async () => {
+      let urlPart = statusVoice ? "delete-voice" : "create-voice"; 
         try {  
-          const response = await axios.post('http://localhost:8000/api/change-voice/',
+          const response = await axios.post(`http://localhost:8000/api/${urlPart}/`,
             {
                 photo_id: photo_id,
-                status: statusVoice
             },
             {
                 headers: {
                     Authorization: `Token ${localStorage.getItem('auth_token')}`,
                 }
             });
-          setStatusVoice(!statusVoice);
+          setStatusVoice( response.status == 200 ? true : false);
         } catch (error) { console.error('Ошибка загрузки:', error);}
       };
 

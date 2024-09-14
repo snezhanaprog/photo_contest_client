@@ -8,7 +8,7 @@ import NavLink from '../routes/NavLink';
 function Photos() {
   const [photos, setPhotos] = useState([]);
   const [sortPhotos, setSortPhotos] = useState({ 
-    publicatedAt: { active: false, up: true }, 
+    publicatedAt: { active: true, up: true }, 
     comments: { active: false, up: true }, 
     voices: { active: false, up: true } 
   });

@@ -24,7 +24,9 @@ function PhotoDetail({id}) {
     }, [])
 
   let getPhotos = () => {
-      axios.get(`http://localhost:8000/api/photos/${id}/`)
+      axios.get(`http://localhost:8000/api/photo`,{
+        'id': id
+      })
       .then((response) => {
         console.log(response.data);
         setPhoto(response.data);

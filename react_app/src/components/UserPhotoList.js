@@ -64,11 +64,6 @@ function UserPhotoList() {
             value="На модерации"
             />
 
-            <input 
-            type="button" 
-            onClick={() => setStatus()} 
-            value="Все" 
-            />
         </div>
     <div>
       {photos.length === 0 ? (

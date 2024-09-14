@@ -52,7 +52,7 @@ function SortPhotoList({ sortPhotos, onSortChange }) {
 
       const resetSorting = () => {
         onSortChange({ 
-          publicatedAt: { active: false, up: true }, 
+          publicatedAt: { active: true, up: true }, 
           comments: { active: false, up: true }, 
           voices: { active: false, up: true } 
         });

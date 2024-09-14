@@ -36,7 +36,10 @@ function UploadPhoto() {
         console.log(response.data)
         alert("Фотография загружена и отправлена на модерацию.")
         closeModal();
-      } catch (error) { console.error('Ошибка загрузки:', error);}
+      } catch (error) { 
+        console.error('Ошибка загрузки:', error);
+        alert("Проверьте корректность полей и попробуйте снова.")
+      }
     };
   
 
