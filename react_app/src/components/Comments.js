@@ -12,9 +12,16 @@ function Comments ({ photo_id }){
     }, [])
 
     let getComments = () => {
+      let headersData = {}
+      if (localStorage.getItem('auth_token')){
+        headersData={
+        Authorization: `Token ${localStorage.getItem('auth_token')}`,
+        'Content-Type':'application/json'
+      }}
       const response = axios.get('http://localhost:8000/api/comments/', {
+            headers: headersData,
             params: { 
-              photo: photo_id,
+              photo_id: photo_id,
              }
       }).then((response) => {
               setComments(response.data);
@@ -23,6 +30,8 @@ function Comments ({ photo_id }){
         console.log(error);
       });
     }
+  
+
     return (
         <div>
             {comments.map(comment => (
