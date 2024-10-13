@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function Voice({photo_id, is_liked}) {
-  const [statusVoice, setStatusVoice] = useState(false);
+  const [statusVoice, setStatusVoice] = useState(is_liked);
 
     useEffect(() => {
-        setStatusVoice(is_liked)
-    }, [])
+      console.log(is_liked)
+      setStatusVoice(is_liked)
+    }, [is_liked])
 
     const changeStatusVoice = async () => {
       let urlPart = statusVoice ? "delete-voice" : "create-voice"; 
