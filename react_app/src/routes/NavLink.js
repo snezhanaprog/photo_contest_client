@@ -21,13 +21,11 @@ function NavLink() {
     <nav>
       {authenticated ? (
         <>
-        <Link to='/photos'>Все фото</Link>
         <Link to='/profile'>Профиль</Link>
         <button onClick={handleLogout}>Выйти</button>
         </>
       ):(
         <>
-        <Link to='/photos'>Все фото</Link>
         <Link to="/">Регистрация</Link>
         <Link to="/log">Авторизация</Link>
         </>
