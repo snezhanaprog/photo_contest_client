@@ -16,7 +16,6 @@ function AuthorizationForm() {
       .then(response => {
         alert('Успешная  авторизация');
         localStorage.setItem('auth_token', response.data['auth_token']);
-        console.log(localStorage.getItem('auth_token'));
         navigate('/photos');
       })
       .catch(error => alert('Имя или пароль неверны'));

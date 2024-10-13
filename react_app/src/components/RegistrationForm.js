@@ -15,7 +15,6 @@ function RegistrationForm() {
       .then(response => {
         alert('Успешная регистрация');
         localStorage.setItem('auth_token', response.data['auth_token']);
-        console.log(localStorage.getItem('auth_token'));
       })
       .catch(error => {
         console.error('Ошибка при отправке данных:', error);
