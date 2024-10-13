@@ -3,6 +3,9 @@ import axios from 'axios';
 import Comments from '../components/Comments';
 import Voice from '../components/Voice';
 import AddComment from '../components/AddComment';
+import UpdatePhoto from '../components/UpdatePhoto';
+import DeletePhoto from '../components/DeletePhoto';
+import RecoverPhoto from '../components/RecoverPhoto';
 
 const isAuthenticated = () => {
   const token = localStorage.getItem('auth_token');
@@ -16,7 +19,10 @@ function PhotoDetail({id}) {
     'title':'',
     'description':'',
     'publicated_at':'',
-    'author':''
+    'author':'',
+    'is_liked':'',
+    'is_change':'',
+    'status':''
   })
 
 
@@ -24,16 +30,16 @@ function PhotoDetail({id}) {
         getPhoto()
     }, [])
 
-  let getPhoto = () => {
-    console.log({id})
-      axios.get(`http://localhost:8000/api/photo/`+id,{
-        headers: {
-          Authorization: `Token ${localStorage.getItem('auth_token')}`,
-          'Content-Type':'application/json'
-        }
-      })
+
+    let getPhoto = () => {
+      let headersData = {}
+      if (localStorage.getItem('auth_token')){
+        headersData={
+        Authorization: `Token ${localStorage.getItem('auth_token')}`,
+        'Content-Type':'application/json'
+      }}
+      axios.get(`http://localhost:8000/api/photo/`+id, {headers: headersData})
       .then((response) => {
-        console.log(response.data);
         setPhoto(response.data);
       })
       .catch((error) => {
@@ -41,20 +47,30 @@ function PhotoDetail({id}) {
       });
     }
 
+
   return (
     <>
         <>
+        { photo.is_change ? (
+          <>
+            <UpdatePhoto id={photo.id}/>
+            <DeletePhoto id={photo.id}/>
+            { photo.status == "deleted" ? (<RecoverPhoto id={photo.id}/>):(<></>)}
+          </>
+        ):(<></>)}
           <h1>{photo.title}</h1>
             <div>
               <p>{photo.description}</p>
               <p>{photo.author}</p>
+              <p>{photo.count_comments}, {photo.count_voices}</p>
+              <p>{photo.publicated_at}</p>
             </div>
         {authenticated ? (
-        <Voice photo_id={id} is_liked={photo.is_liked}/>
-        ):(
-          <></>
-        )}
-          <AddComment photo_id={id} text={"Добавить комментарий"}/>
+          <>
+            <Voice photo_id={id} is_liked={photo.is_liked}/>
+            <AddComment photo_id={id} text={"Добавить комментарий"}/>
+          </>
+        ):(<></>)}
           <Comments photo_id={id}/>
         </>
     </>
