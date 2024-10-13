@@ -2,94 +2,59 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Modal from 'react-modal';
 import PhotoDetail from '../pages/PhotoDetail';
+import UpdatePhoto from './UpdatePhoto';
+import PhotoList from './PhotoList';
 
 function UserPhotoList() {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedPhotoId, setSelectedPhotoId] = useState(null);
   const [photos, setPhotos] = useState([]);
   const [status, setStatus] = useState("public");
-
-  const openModal = (id) => {
-    setSelectedPhotoId(id);
-    setModalIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-    setSelectedPhotoId(null);
-  };
-
-  const selectedPhoto = photos.find(photo => photo.id === selectedPhotoId);
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState({ page: 1, total_pages: 1 });
 
     useEffect(() => {
       getUserPhoto()
-    }, [status])
+    }, [status, page])
 
     const getUserPhoto = async () => {
       try {
-        console.log(`Token ${localStorage.getItem('auth_token')}`)
+
         const response = await axios.get('http://localhost:8000/api/users-photos', {
           headers: {
             Authorization: `Token ${localStorage.getItem('auth_token')}`,
             'Content-Type':'application/json'
           },
           params: { 
-            status: status
+            status: status,
+            current_page: page
            }
         });
-        console.log(response.data)
-        setPhotos(response.data);
+        setPhotos(response.data['photos']);
+        setPagination(response.data['pagination']);
+        console.log(response)
       } catch (error) { console.error('Ошибка загрузки:', error);}
+    };
+
+  
+    const handlePageChange = (num) => {
+      setPage(num);
     };
   
 
   return (
     <>
         <div>
-            <input 
-            type="button" 
-            onClick={() => setStatus("public")} 
-            value="Опубликованные"
-            />
-
-            <input 
-            type="button" 
-            onClick={() => setStatus("deleted")} 
-            value="В корзине"
-            />
-
-            <input 
-            type="button" 
-            onClick={() => setStatus("private")} 
-            value="На модерации"
-            />
-
+            <input type="button" onClick={() => setStatus("public")} value="Опубликованные"/>
+            <input type="button" onClick={() => setStatus("deleted")} value="В корзине"/>
+            <input type="button" onClick={() => setStatus("private")} value="На модерации"/>
         </div>
+    <PhotoList photos={photos}/>
     <div>
-      {photos.length === 0 ? (
-        <p>Нет фотографий для отображения.</p>
-      ) : (
-        photos.map(photo => (
-          <div key={photo.id}>
-            <button onClick={() => openModal(photo.id)}>{photo.title}</button>
-            <img src={photo.image} alt={photo.title} />
-            <p>{photo.description}</p>
-          </div>
-        ))
-      )}
-      <Modal 
-        isOpen={modalIsOpen} 
-        onRequestClose={closeModal}
-        ariaHideApp={false}
-      >
-        {selectedPhoto && (
-          <div>
-            <PhotoDetail id={selectedPhotoId} />
-            <button onClick={closeModal}>Закрыть</button>
-          </div>
-        )}
-      </Modal>
-    </div>
+        {Array.from({ length: pagination.total_pages }, (_, index) => (
+          <button key={index + 1} onClick={() => handlePageChange(index + 1)}>
+            {index + 1}
+          </button>
+        ))}
+      </div>
     </>
   );
 }

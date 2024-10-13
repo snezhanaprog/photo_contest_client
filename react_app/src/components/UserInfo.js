@@ -6,6 +6,9 @@ function UserInfo() {
     const [info, setInfo] = useState({
       'user':{
         'username': ""
+      },
+      'profile':{
+        
       }
     });
 
